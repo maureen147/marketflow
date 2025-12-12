@@ -8,7 +8,7 @@
 
 A Django REST Framework-based e-commerce backend API for ALX Software Engineering capstone project.
 
-## íº€ Features
+## ï¿½ï¿½ï¿½ Features
 
 - âœ… **JWT Authentication** - Secure token-based authentication
 - âœ… **Product Management** - Full CRUD operations for products
@@ -16,7 +16,7 @@ A Django REST Framework-based e-commerce backend API for ALX Software Engineerin
 - âœ… **RESTful API** - Clean, structured API endpoints
 - âœ… **SQLite Database** - Easy setup and development
 
-## í³‹ API Endpoints
+## ï¿½ï¿½ï¿½ API Endpoints
 
 ### Authentication
 - `POST /api/token/` - Get JWT access token
@@ -33,7 +33,7 @@ A Django REST Framework-based e-commerce backend API for ALX Software Engineerin
 - `GET /api/categories/` - List all categories
 - `POST /api/categories/` - Create new category (Authenticated)
 
-## í» ï¸ Installation
+## ï¿½ï¿½ï¿½ï¸ Installation
 
 ### Prerequisites
 - Python 3.8+
@@ -67,7 +67,7 @@ python manage.py createsuperuser
 python manage.py runserver
 \`\`\`
 
-## í·ª Testing the API
+## ï¿½ï¿½ï¿½ Testing the API
 
 ### Get JWT Token
 \`\`\`bash
@@ -95,7 +95,7 @@ curl -X POST http://localhost:8000/api/products/ \
      }'
 \`\`\`
 
-## í³ Project Structure
+## ï¿½ï¿½ï¿½ Project Structure
 
 \`\`\`
 marketflow/
@@ -108,7 +108,7 @@ marketflow/
 â””â”€â”€ README.md
 \`\`\`
 
-## í´§ Technologies Used
+## ï¿½ï¿½ï¿½ Technologies Used
 
 - **Django** - Web framework
 - **Django REST Framework** - API framework  
@@ -116,24 +116,16 @@ marketflow/
 - **SQLite** - Database
 - **Python** - Programming language
 
-## í³– Documentation
+## ï¿½ï¿½ï¿½ Documentation
 
 - **Admin Panel**: http://localhost:8000/admin/
 - **API Root**: http://localhost:8000/api/
 - **JWT Endpoints**: \`/api/token/\` and \`/api/token/refresh/\`
 
-## í±¤ Author
+## ï¿½ï¿½ï¿½ Author
 
 **Maureen** - ALX Software Engineering Student
 
 - GitHub: [@maureen147](https://github.com/maureen147)
 
-## í³ License
 
-This project is part of the ALX Software Engineering program.
-
----
-
-<div align="center">
-Made with â¤ï¸ for ALX Capstone Project
-</div>
