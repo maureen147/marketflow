@@ -1,25 +1,79 @@
-from rest_framework import generics, permissions
-from .models import Product, Category
-from .serializers import ProductSerializer, CategorySerializer
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
+from .models import Product, Category, ProductReview
+from .serializers import ProductSerializer, CategorySerializer, ProductReviewSerializer
 
 class ProductListView(generics.ListCreateAPIView):
-    """List all products or create a new product"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['category']
+    search_fields = ['name', 'description', 'category__name']
+    ordering_fields = ['price', 'created_at', 'name']
+    ordering = ['-created_at']
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        min_price = self.request.query_params.get('min_price')
+        max_price = self.request.query_params.get('max_price')
+        in_stock = self.request.query_params.get('in_stock')
+        
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+        if in_stock == 'true':
+            queryset = queryset.filter(stock_quantity__gt=0)
+        elif in_stock == 'false':
+            queryset = queryset.filter(stock_quantity=0)
+        
+        return queryset
+    
     def perform_create(self, serializer):
-        # Automatically set created_by to current user
         serializer.save(created_by=self.request.user)
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Retrieve, update or delete a product"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+class ProductSearchView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        query = self.request.query_params.get('q', '')
+        if not query:
+            return Product.objects.none()
+        
+        return Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        ).distinct()
+
+class ProductReviewListView(generics.ListCreateAPIView):
+    serializer_class = ProductReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+        return ProductReview.objects.filter(product_id=product_id)
+    
+    def perform_create(self, serializer):
+        product_id = self.kwargs['product_id']
+        product = Product.objects.get(id=product_id)
+        
+        if ProductReview.objects.filter(product=product, user=self.request.user).exists():
+            raise serializers.ValidationError("You have already reviewed this product.")
+        
+        serializer.save(product=product)
+
 class CategoryListView(generics.ListCreateAPIView):
-    """List all categories or create a new category"""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
