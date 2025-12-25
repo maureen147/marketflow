@@ -1,4 +1,5 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, status
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from .models import Product, Category, ProductReview
@@ -12,7 +13,7 @@ class ProductListView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category']
     search_fields = ['name', 'description', 'category__name']
-    ordering_fields = ['price', 'created_at', 'name']
+    ordering_fields = ['price', 'created_at', 'name', 'updated_at']  # Add 'updated_at'
     ordering = ['-created_at']
     
     def get_queryset(self):
@@ -40,6 +41,9 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_update(self, serializer):
+        serializer.save()
 
 class ProductSearchView(generics.ListAPIView):
     serializer_class = ProductSerializer
@@ -62,7 +66,7 @@ class ProductReviewListView(generics.ListCreateAPIView):
     
     def get_queryset(self):
         product_id = self.kwargs['product_id']
-        return ProductReview.objects.filter(product_id=product_id)
+        return ProductReview.objects.filter(product_id=product_id).order_by('-created_at')
     
     def perform_create(self, serializer):
         product_id = self.kwargs['product_id']
@@ -71,9 +75,12 @@ class ProductReviewListView(generics.ListCreateAPIView):
         if ProductReview.objects.filter(product=product, user=self.request.user).exists():
             raise serializers.ValidationError("You have already reviewed this product.")
         
-        serializer.save(product=product)
+        serializer.save(product=product, user=self.request.user)
 
 class CategoryListView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save()

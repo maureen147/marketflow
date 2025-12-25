@@ -5,15 +5,15 @@ from django.db.models import Avg
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at']
 
 class ProductReviewSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     
     class Meta:
         model = ProductReview
-        fields = ['id', 'user', 'rating', 'comment', 'created_at']
-        read_only_fields = ['user', 'created_at']
+        fields = ['id', 'user', 'rating', 'comment', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'created_at', 'updated_at']
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -31,9 +31,9 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'description', 'price', 'stock_quantity',
             'image_url', 'category', 'category_id', 'created_by',
-            'reviews', 'average_rating', 'created_at'
+            'reviews', 'average_rating', 'created_at', 'updated_at'  # Add these
         ]
-        read_only_fields = ['created_by', 'created_at', 'average_rating']
+        read_only_fields = ['created_by', 'created_at', 'updated_at', 'average_rating']
     
     def get_average_rating(self, obj):
         avg = obj.reviews.aggregate(Avg('rating'))['rating__avg']
