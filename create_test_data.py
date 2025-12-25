@@ -18,7 +18,7 @@ print("=== CREATING TEST DATA ===")
 print("1. Creating admin user...")
 try:
     admin, created = User.objects.get_or_create(
-        username='admin',  # Changed from 'glowworm' to 'admin'
+        username='admin',  
         defaults={
             'email': 'admin@marketflow.com',
             'is_staff': True,
@@ -26,7 +26,7 @@ try:
         }
     )
     if created:
-        admin.set_password('admin123')  # Set password for new admin
+        admin.set_password('admin123')  
         admin.save()
         print("   Created new admin: admin / admin123")
     else:
