@@ -5,3 +5,4 @@ django-filter==23.5
 gunicorn==21.2.0
 whitenoise==6.6.0
 python-decouple==3.8
+setuptools==65.5.0 
