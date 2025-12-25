@@ -1,17 +1,6 @@
-from rest_framework import generics, permissions
-from .serializers import UserSerializer, RegisterSerializer
-from django.contrib.auth import get_user_model
+# users/views.py
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 
-User = get_user_model()
-
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.AllowAny]
-    serializer_class = RegisterSerializer
-
-class UserProfileView(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def get_object(self):
-        return self.request.user
+class EmailTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
