@@ -1,118 +1,91 @@
-# MarketFlow - E-commerce API
+MarketFlow - E-commerce API
+A complete RESTful e-commerce backend API built with Django REST Framework.
 
-.
+Features
+🔐 JWT Authentication
 
-## 🚀 Features
+📦 Product management with categories
 
-### ✅ **Week 1-2: Foundation & Products**
-- **JWT Authentication** - Secure token-based authentication
-- **Product Management** - Full CRUD operations for products
-- **Category System** - Organized product categorization  
-- **RESTful API** - Clean, structured API endpoints
-- **Admin Permissions** - Role-based access control
+🛒 Shopping cart functionality
 
-### ✅ **Week 3-4: Advanced Features**
-- **Product Search** - Search by name, description, or category
-- **Advanced Filtering** - Filter by category, price range, stock status
-- **Pagination** - Page-based navigation for product lists
-- **Product Reviews** - Rating system with user reviews
-- **Average Ratings** - Automatic rating calculation
+📊 Order processing
 
-## 📋 API Endpoints
+🔍 Product search and filtering
 
-### 🔐 Authentication
-- `POST /api/token/` - Get JWT access token
-- `POST /api/token/refresh/` - Refresh access token
+⭐ Product reviews and ratings
 
-### 📦 Products
-- `GET /api/products/` - List all products (paginated)
-- `POST /api/products/` - Create new product (Authenticated)
-- `GET /api/products/{id}/` - Get product details
-- `PUT /api/products/{id}/` - Update product (Authenticated)
-- `DELETE /api/products/{id}/` - Delete product (Authenticated)
+👑 Role-based permissions (Admin/Customer)
 
-### 🔍 Search & Filtering
-- `GET /api/products/search/?q=keyword` - Search products
-- `GET /api/products/?category=1&min_price=50&max_price=500` - Filter products
-- `GET /api/products/?in_stock=true` - Filter by stock availability
-
-### 🏷️ Categories
-- `GET /api/categories/` - List all categories
-- `POST /api/categories/` - Create new category (Authenticated)
-
-### ⭐ Reviews
-- `GET /api/products/{id}/reviews/` - Get product reviews
-- `POST /api/products/{id}/reviews/` - Add review (Authenticated)
-
-## 🛠️ Installation
-
-### Prerequisites
-- Python 3.8+
-- pip
-
-### Setup
-```bash
-# 1. Clone the repository
+1. Clone and Setup
 git clone https://github.com/maureen147/marketflow.git
 cd marketflow
-
-# 2. Create virtual environment
 python -m venv venv
 
-# 3. Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
+# Activate virtual environment
+# Windows: venv\Scripts\activate
+# Mac/Linux: source venv/bin/activate
 
-# 4. Install dependencies
 pip install -r requirements.txt
 
-# 5. Run migrations
+2. Database Setup
+
 python manage.py migrate
-
-# 6. Create superuser
 python manage.py createsuperuser
+# Follow prompts to create admin user
 
-# 7. Run development server
+3. Run Server
 python manage.py runserver
+Visit: http://localhost:8000/
 
+API Endpoints
+Authentication
+POST /api/token/ - Get JWT token
+
+POST /api/token/refresh/ - Refresh token
+
+Products
+GET /api/products/ - List products (paginated)
+
+POST /api/products/ - Create product (Admin only)
+
+GET /api/products/{id}/ - Product details
+
+GET /api/products/search/?q=keyword - Search products
+
+Cart
+GET /api/cart/ - View cart
+
+POST /api/cart/add/ - Add to cart
+
+POST /api/checkout/ - Create order
+
+Orders
+GET /api/orders/ - List orders
+
+GET /api/orders/{id}/ - Order details
+
+Test Users
+Admin: glowworm / [your password]
+
+Customer: customer@marketflow.com / customer123
+
+Project Structure
 
 marketflow/
-├── core/              # Django project settings
-├── products/          # Product management app
-│   ├── models.py      # Product, Category, Review models
-│   ├── serializers.py # API serializers
-│   ├── views.py       # API views with search/filter
-│   └── urls.py        # Product endpoints
-├── users/             # User authentication app
-├── .gitignore
-├── requirements.txt   # Dependencies including django-filter
-├── manage.py
-└── README.md
+├── products/     # Product management
+├── orders/       # Cart and orders
+├── users/        # Authentication
+└── core/         # Django settings
 
+Testing
+python manage.py test
 
+Technologies
+Django & Django REST Framework
 
-🔧 Technologies Used
-Django - Web framework
+JWT Authentication
 
-Django REST Framework - API framework
+SQLite Database
 
-JWT Authentication - Secure token-based auth
+django-filter for search/filtering
 
-SQLite - Database (Development)
-
-django-filter - Advanced filtering
-
-Python - Programming language
-
-📖 Documentation
-Admin Panel: http://localhost:8000/admin/
-
-API Root: http://localhost:8000/api/
-
-JWT Endpoints: /api/token/ and /api/token/refresh/
-
-Product Search: /api/products/search/?q={query}
-
-Product Reviews: /api/products/{id}/reviews/
